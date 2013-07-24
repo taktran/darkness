@@ -81,13 +81,20 @@
     init();
 
     // Initial draw
-    dataRef.once('value', function(data) {
-      var dataVal = data.val();
-
-      if (dataVal && _.has(dataVal, "lines")) {
-        var strokes = dataVal.lines;
+    dataRef.once('value', function() {
+      dataRef.child("lines").on('value', function(data) {
+        var strokes = data.val();
         sketchpad.json(strokes);
-      }
+      });
+
+      // Check all values for clearing canvas
+      dataRef.on('value', function(data) {
+        var dataVal = data.val();
+        if (!dataVal || !_.has(dataVal, "lines")) {
+          // Clear canvas
+          sketchpad.clear();
+        }
+      });
 
       dataRef.child("background-lightness").on('value', function(data) {
         bgColour.l = data.val();
@@ -106,19 +113,6 @@
         }
 
         updateBgColour();
-      });
-
-      dataRef.on('value', function(data) {
-        var dataVal = data.val();
-        console.log("value", dataVal);
-
-        if (dataVal && _.has(dataVal, "lines")) {
-          var lines = dataVal.lines;
-          sketchpad.json(lines);
-        } else {
-          // Clear canvas
-          sketchpad.clear();
-        }
       });
 
       // When the sketchpad changes, upload data
