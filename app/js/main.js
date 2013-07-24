@@ -60,6 +60,7 @@
 
   function updatePenSize() {
     pen.width(penSize);
+    $(".pen-size").text(penSize);
   }
 
   // function setupSocketIO() {
