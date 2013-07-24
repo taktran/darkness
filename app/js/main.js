@@ -25,9 +25,23 @@
         sketchpad.json(strokes);
       }
 
-      dataRef.child("lines").on('value', function(data) {
-        var lines = data.val();
-        sketchpad.json(lines);
+      dataRef.on('value', function(data) {
+        var dataVal = data.val();
+        console.log("value", dataVal);
+
+        if (dataVal && _.has(dataVal, "lines")) {
+          var lines = dataVal.lines;
+          sketchpad.json(lines);
+        } else {
+          // Clear canvas
+          sketchpad.clear();
+        }
+      });
+
+      dataRef.on('child_removed', function() {
+        console.log("child_removed", data.val());
+        // var lines = data.val();
+        // sketchpad.json(lines);
       });
 
       // When the sketchpad changes, upload data
@@ -36,10 +50,15 @@
         dataRef.child("lines").set(data);
       });
     });
+
+    $("#clear").click(function() {
+      dataRef.child("lines").remove();
+    });
   });
 
   // Global variables (for debugging)
   window.App = {
+    dataRef: dataRef,
     sketchpad: sketchpad
   };
 })();

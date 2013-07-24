@@ -13,3 +13,17 @@ html, body {
 
   background-color: black;
 }
+
+footer {
+  position: fixed;
+  background-color: #919191;
+  bottom: 0;
+  height: 20px;
+  width: 100%;
+  padding: 10px;
+}
+
+#clear {
+  position: absolute;
+  right: 30px;
+}
