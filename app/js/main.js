@@ -62,6 +62,7 @@
   function updatePenSize() {
     pen.width(penSize);
     $(".pen-size").text(penSize);
+    console.log("pen size:", penSize);
   }
 
   function updatePenOpacity() {
