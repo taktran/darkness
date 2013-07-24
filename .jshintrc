@@ -38,6 +38,7 @@
     "xit": true,
     "expect": true,
 
-    "io": true
+    "io": true,
+    "Firebase": true
   }
 }
