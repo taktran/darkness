@@ -265,9 +265,8 @@
           $(_container).unbind("mouseup", _mouseup);
           $(document).unbind("mouseup", _mouseup);
 
-          // iPhone Events
-          var agent = navigator.userAgent;
-          if (agent.indexOf("iPhone") > 0 || agent.indexOf("iPod") > 0) {
+          // Touch screen events
+          if (isTouchEnabled()) {
             $(_container).unbind("touchstart", _touchstart);
             $(_container).unbind("touchmove", _touchmove);
             $(_container).unbind("touchend", _touchend);
@@ -283,9 +282,8 @@
           // Handle the case when the mouse is released outside the canvas.
           $(document).mouseup(_mouseup);
 
-          // iPhone Events
-          var agent = navigator.userAgent;
-          if (agent.indexOf("iPhone") > 0 || agent.indexOf("iPod") > 0) {
+          // Touch screen events
+          if (isTouchEnabled()) {
             $(_container).bind("touchstart", _touchstart);
             $(_container).bind("touchmove", _touchmove);
             $(_container).bind("touchend", _touchend);
@@ -299,9 +297,9 @@
         $(_container).unbind("mouseup", _mouseup);
         $(document).unbind("mouseup", _mouseup);
 
-        // iPhone Events
-        var agent = navigator.userAgent;
-        if (agent.indexOf("iPhone") > 0 || agent.indexOf("iPod") > 0) {
+        // Touch screen events
+
+        if (isTouchEnabled()) {
           $(_container).unbind("touchstart", _touchstart);
           $(_container).unbind("touchmove", _touchmove);
           $(_container).unbind("touchend", _touchend);
@@ -709,6 +707,13 @@ Raphael.fn.display = function(elements) {
   }
 };
 
+function isTouchEnabled() {
+  var agent = navigator.userAgent;
+  return agent.indexOf("iPhone") > 0 ||
+    agent.indexOf("iPod") > 0 ||
+    agent.indexOf("iPad") > 0 ||
+    agent.indexOf("Android") > 0;
+}
 
 /**
  * Utility functions to compare objects by Phil Rathe.
