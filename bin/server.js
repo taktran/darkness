@@ -90,30 +90,27 @@ function mapSensorValue(value, min, max) {
 board.on("ready", function() {
   console.log("board ready");
 
-  lightnessPot = new Sensor("A0");
-  huePot = new Sensor("A1");
-  penSizePot = new Sensor("A2");
+  lightnessPot = new Sensor("A0", board);
+  huePot = new Sensor("A1", board);
+  penSizePot = new Sensor("A2", board);
 
   lightnessPot.on("read", function(value) {
     var lightness = mapSensorValue(value, LIGHTNESS_MIN, LIGHTNESS_MAX);
 
     dataRef.child("background-lightness").set(lightness);
   });
-  lightnessPot.injectIntoRepl(board);
 
   huePot.on("read", function(value) {
     var hue = mapSensorValue(value, HUE_MIN, HUE_MAX);
 
     dataRef.child("background-hue").set(hue);
   });
-  huePot.injectIntoRepl(board);
 
   penSizePot.on("read", function(value) {
     var penSize = mapSensorValue(value, PEN_SIZE_MIN, PEN_SIZE_MAX);
 
     dataRef.child("pen-size").set(penSize);
   });
-  penSizePot.injectIntoRepl(board);
 
 
   // ------------------------------
