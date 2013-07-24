@@ -77,9 +77,6 @@ http.listen(9090);
 
 console.log("server started on localhost:9090");
 
-var io = require("socket.io").listen(http); // server listens for socket.io communication at port 8000
-io.set("log level", 1); // disables debugging. this is optional. you may remove it if desired.
-
 function mapSensorValue(value, min, max) {
   var valueProportion = value / (SENSOR_MAX - SENSOR_MIN),
     valueMap = Math.floor(
@@ -146,14 +143,17 @@ board.on("ready", function() {
   });
 });
 
-io.sockets.on("connection", function (socket) {
-  // If socket.io receives message from the client browser then
-  // this call back will be executed.
-  socket.on("message", function (msg) {
-    console.log(msg);
-  });
-  // If a web browser disconnects from Socket.IO then this callback is called.
-  socket.on("disconnect", function () {
-    console.log("disconnected");
-  });
-});
+// No longer used - using firebase instead
+// var io = require("socket.io").listen(http); // server listens for socket.io communication at port 8000
+// io.set("log level", 1); // disables debugging. this is optional. you may remove it if desired.
+// io.sockets.on("connection", function (socket) {
+//   // If socket.io receives message from the client browser then
+//   // this call back will be executed.
+//   socket.on("message", function (msg) {
+//     console.log(msg);
+//   });
+//   // If a web browser disconnects from Socket.IO then this callback is called.
+//   socket.on("disconnect", function () {
+//     console.log("disconnected");
+//   });
+// });
