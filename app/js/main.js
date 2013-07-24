@@ -1,5 +1,10 @@
 (function (){
   'use strict';
+  var SENSOR_MIN = 0,
+    SENSOR_MAX = 1023,
+    INPUT_MIN = 100,
+    INPUT_MAX = 255;
+
   var dataRef = new Firebase('https://darkness.firebaseIO.com/'),
     sketchpad = Raphael.sketchpad("editor", {
       width: 900,
@@ -26,6 +31,37 @@
     console.log("randomPenColour", penColour);
     pen.color(penColour);
     $("footer").css("background-color", penColour);
+  }
+
+  function mapSensorValue(value) {
+    var valueProportion = value / (SENSOR_MAX - SENSOR_MIN),
+      valueMap = Math.floor(
+        (valueProportion * (INPUT_MAX - INPUT_MIN)) + INPUT_MIN
+      );
+
+    return valueMap;
+  }
+
+  function setupSocketIO() {
+    var socket = io.connect("/", {
+      "reconnect" : true,
+      "reconnection delay" : 500,
+      "max reconnection attempts" : 10
+    });
+
+    socket.on("connect", function() {
+      socket.emit("message", "Connected - " + (new Date()).toString());
+    });
+
+    socket.on("sensor1", function(value) {
+      var mappedValue = mapSensorValue(value);
+      console.log("1:", value, mappedValue);
+    });
+
+    socket.on("sensor2", function(value) {
+      var mappedValue = mapSensorValue(value);
+      console.log("2:", value, mappedValue);
+    });
   }
 
   $(document).ready(function () {
@@ -72,6 +108,8 @@
     $("footer").click(function() {
       randomPenColour();
     });
+
+    setupSocketIO();
   });
 
   // Global variables (for debugging)
