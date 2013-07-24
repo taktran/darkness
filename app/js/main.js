@@ -2,8 +2,8 @@
   'use strict';
   var SENSOR_MIN = 0,
     SENSOR_MAX = 1023,
-    INPUT_MIN = 100,
-    INPUT_MAX = 255;
+    SENSOR_1_MIN = 0,
+    SENSOR_1_MAX = 100;
 
   var dataRef = new Firebase('https://darkness.firebaseIO.com/'),
     sketchpad = Raphael.sketchpad("editor", {
@@ -12,7 +12,32 @@
       editing: true
     }),
     pen = sketchpad.pen(),
-    penColour;
+    penColour,
+    bgColour = "black";
+
+  function init() {
+    // Background colour
+    updateBgColour(bgColour);
+
+    // Set up pen
+    randomPenColour();
+    pen.opacity(0.5);
+  }
+
+  // Control background colour brightness with sensor 1
+  function sensor1Change(value) {
+    var mappedValue = mapSensorValue(value, SENSOR_1_MIN, SENSOR_1_MAX);
+    console.log("1:", value, ",", mappedValue);
+
+    bgColour = "hsl(0, 0%, " + mappedValue + "%)";
+    console.log("bgColour", bgColour);
+    updateBgColour(bgColour);
+  }
+
+  function sensor2Change(value) {
+    var mappedValue = "unknown"; //mapSensorValue(value);
+    console.log("2:", value, ",", mappedValue);
+  }
 
   function randomColour() {
     // 30 random hues with step of 12 degrees
@@ -33,10 +58,14 @@
     $("footer").css("background-color", penColour);
   }
 
-  function mapSensorValue(value) {
+  function updateBgColour(colour) {
+    $("body").css("background-color", colour);
+  }
+
+  function mapSensorValue(value, min, max) {
     var valueProportion = value / (SENSOR_MAX - SENSOR_MIN),
       valueMap = Math.floor(
-        (valueProportion * (INPUT_MAX - INPUT_MIN)) + INPUT_MIN
+        (valueProportion * (max - min)) + min
       );
 
     return valueMap;
@@ -54,20 +83,16 @@
     });
 
     socket.on("sensor1", function(value) {
-      var mappedValue = mapSensorValue(value);
-      console.log("1:", value, mappedValue);
+      sensor1Change(value);
     });
 
     socket.on("sensor2", function(value) {
-      var mappedValue = mapSensorValue(value);
-      console.log("2:", value, mappedValue);
+      sensor2Change(value);
     });
   }
 
   $(document).ready(function () {
-    // Set up pen
-    randomPenColour();
-    pen.opacity(0.5);
+    init();
 
     // Initial draw
     dataRef.once('value', function(data) {
