@@ -9,75 +9,7 @@ $green: #00A368;
 html, body {
   padding: 0;
   margin: 0;
-  height: 100%;
   font-family: "Helvetica, sans-serif";
-}
 
-.container {
-  width: 100%;
-  height: 100%;
-}
-
-.row {
-  margin: 0;
-}
-
-.board {
-  height: 100%;
-
-  & > div {
-    display: block;
-    width: 33.33333%;
-    height: 100%;
-    float: left;
-  }
-
-  div.done {
-    display: none; // Hide by default
-
-    width: 100%;
-    float: none;
-    position: absolute;
-    text-align: center;
-    background-color: rgba(0,0,0, 0.7);
-
-    h2 {
-      color: white;
-      font-size: 4em;
-      margin-top: 30%;
-    }
-  }
-
-  h3 {
-    text-align: center;
-  }
-
-  input {
-    width: 80%;
-    display: block;
-    margin: 20px auto 0;
-  }
-}
-
-.player-1 {
-  // background-color: $yellow;
-}
-
-.player-2 {
-  // background-color: $blue;
-}
-
-.combined {
-  & > div {
-    height: 50%;
-    display: block;
-  }
-
-  .goal {
-    // background-color: $green;
-  }
-
-  .current {
-    // background-color: $green - #444444;
-  }
+  background-color: black;
 }

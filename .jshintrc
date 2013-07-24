@@ -39,6 +39,7 @@
     "expect": true,
 
     "io": true,
-    "Firebase": true
+    "Firebase": true,
+    "Raphael": true
   }
 }
