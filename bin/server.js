@@ -95,6 +95,14 @@ function inRange(value, valueMin, valueMax, rangeMin, rangeMax) {
       (valueProportion * (rangeMax - rangeMin)) + rangeMin
     );
 
+  if (valueMap >= rangeMax) {
+    valueMap = rangeMax;
+  }
+
+  if (valueMap <= rangeMin) {
+    valueMap = rangeMin;
+  }
+
   return valueMap;
 }
 
