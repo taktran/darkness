@@ -13,6 +13,7 @@
     pen = sketchpad.pen(),
     penSize = 5,
     penColour,
+    penOpacity = 100,
     bgColour = {
       h: "0",
       s: "0",
@@ -63,6 +64,12 @@
     $(".pen-size").text(penSize);
   }
 
+  function updatePenOpacity() {
+    var roundedOpacity = Math.round( penOpacity * 100 ) / 100;
+    pen.opacity(penOpacity);
+    $(".pen-opacity").text(roundedOpacity);
+  }
+
   // function setupSocketIO() {
   //   var socket = io.connect("/", {
   //     "reconnect" : true,
@@ -101,6 +108,11 @@
           // Clear canvas
           sketchpad.clear();
         }
+      });
+
+      dataRef.child("opacity").on('value', function(data) {
+        penOpacity = data.val();
+        updatePenOpacity();
       });
 
       dataRef.child("background-lightness").on('value', function(data) {

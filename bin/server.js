@@ -1,8 +1,11 @@
 var SENSOR_MIN = 0,
     SENSOR_MAX = 1023,
 
+    LIGHT_SENSOR_MIN = 880,
+    LIGHT_SENSOR_MAX = 1015,
+
     LIGHTNESS_MIN = 0,
-    LIGHTNESS_MAX = 100,
+    LIGHTNESS_MAX = 1.0,
 
     HUE_MIN = 1,
     HUE_MAX = 360,
@@ -86,6 +89,15 @@ function mapSensorValue(value, min, max) {
   return valueMap;
 }
 
+function inRange(value, valueMin, valueMax, rangeMin, rangeMax) {
+  var valueProportion = Math.abs(value - valueMin) / (valueMax - valueMin),
+    valueMap = (
+      (valueProportion * (rangeMax - rangeMin)) + rangeMin
+    );
+
+  return valueMap;
+}
+
 // Connect to arduino
 board.on("ready", function() {
   console.log("board ready");
@@ -116,17 +128,13 @@ board.on("ready", function() {
   // ------------------------------
   // Photo resister
   // ------------------------------
-  photoResistor = new five.Sensor({
-    pin: "A3",
-    freq: 250
-  });
+  photoResistor = new Sensor("A3", board);
 
-  board.repl.inject({
-    pot: photoResistor
-  });
+  photoResistor.on("read", function(value) {
+    var opacityVal = inRange(value, LIGHT_SENSOR_MIN, LIGHT_SENSOR_MAX, LIGHTNESS_MIN, LIGHTNESS_MAX);
 
-  photoResistor.on("read", function( err, value ) {
-    // console.log( value, this.normalized );
+    console.log("light:", opacityVal, "(", value, ")");
+    dataRef.child("opacity").set(opacityVal);
   });
 });
 
