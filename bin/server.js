@@ -83,24 +83,25 @@ function mapSensorValue(value, min, max) {
 board.on("ready", function() {
   console.log("board ready");
 
-  pot = new Potentiometer("A0");
-  pot2 = new Potentiometer("A1");
+  lightnessPot = new Potentiometer("A0");
+  huePot = new Potentiometer("A1");
   pot3 = new Potentiometer("A2");
 
-  pot.on("read", function(value) {
+  lightnessPot.on("read", function(value) {
     var lightness = mapSensorValue(value, SENSOR_1_MIN, SENSOR_1_MAX);
 
     dataRef.child("background-lightness").set(lightness);
   });
+  lightnessPot.injectIntoRepl(board);
 
-  pot2.on("read", function(value) {
+  huePot.on("read", function(value) {
     var hue = mapSensorValue(value, SENSOR_2_MIN, SENSOR_2_MAX);
 
     dataRef.child("background-hue").set(hue);
   });
 
-  pot.injectIntoRepl(board);
-  pot2.injectIntoRepl(board);
+
+  huePot.injectIntoRepl(board);
 });
 
 io.sockets.on("connection", function (socket) {
