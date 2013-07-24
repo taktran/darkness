@@ -1,4 +1,7 @@
-var SENSOR_MIN = 0,
+var FADE_INTERVAL = 5 * 1000,
+    FADE_AMOUNT = 0.1,
+
+    SENSOR_MIN = 0,
     SENSOR_MAX = 1023,
 
     LIGHT_SENSOR_MIN = 880,
@@ -17,6 +20,7 @@ var fs = require("fs");
 var url = require("url");
 var Firebase = require('firebase'),
   dataRef = new Firebase('https://darkness.firebaseIO.com/');
+var _ = require('../app/vendor/underscore-min');
 
 var five = require("johnny-five"),
   board = new five.Board({ port: "/dev/tty.usbserial-A800ep51" }),
@@ -142,6 +146,27 @@ board.on("ready", function() {
     dataRef.child("opacity").set(opacityVal);
   });
 });
+
+// Fade all strokes to black eventually
+setInterval(function() {
+  dataRef.child("lines").once('value', function(data) {
+    var strokes = data.val();
+
+    strokes = _.map(strokes, function(stroke) {
+      stroke["stroke-opacity"] = stroke["stroke-opacity"] - FADE_AMOUNT;
+
+      return stroke;
+    });
+
+    // Remove all strokes with opacity < 0
+    strokes = _.reject(strokes, function(stroke) {
+      return stroke["stroke-opacity"] < 0;
+    });
+
+    dataRef.child("lines").set(strokes);
+  });
+
+}, FADE_INTERVAL);
 
 // No longer used - using firebase instead
 // var io = require("socket.io").listen(http); // server listens for socket.io communication at port 8000

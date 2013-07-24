@@ -98,7 +98,7 @@
     dataRef.once('value', function() {
       dataRef.child("lines").on('value', function(data) {
         var strokes = data.val();
-        sketchpad.json(strokes);
+        sketchpad.strokes(strokes);
       });
 
       // Check all values for clearing canvas
@@ -142,7 +142,7 @@
       // When the sketchpad changes, upload data
       sketchpad.change(function() {
         var data = sketchpad.json();
-        dataRef.child("lines").set(data);
+        dataRef.child("lines").set(JSON.parse(data));
       });
     });
 
