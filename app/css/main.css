@@ -11,7 +11,14 @@ footer {
   height: 20px;
   width: 100%;
   padding: 10px; }
+  footer p {
+    background-color: white;
+    display: inline-block;
+    width: 100px;
+    padding: 5px;
+    margin-top: -4px; }
 
 #clear {
   position: absolute;
-  right: 30px; }
+  right: 30px;
+  top: 10px; }
