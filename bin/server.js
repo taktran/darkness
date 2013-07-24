@@ -133,7 +133,7 @@ board.on("ready", function() {
   photoResistor.on("read", function(value) {
     var opacityVal = inRange(value, LIGHT_SENSOR_MIN, LIGHT_SENSOR_MAX, LIGHTNESS_MIN, LIGHTNESS_MAX);
 
-    console.log("light:", opacityVal, "(", value, ")");
+    // console.log("light:", opacityVal, "(", value, ")");
     dataRef.child("opacity").set(opacityVal);
   });
 });
