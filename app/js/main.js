@@ -1,9 +1,5 @@
 (function (){
   'use strict';
-  var SENSOR_MIN = 0,
-    SENSOR_MAX = 1023,
-    SENSOR_1_MIN = 0,
-    SENSOR_1_MAX = 100;
 
   var dataRef = new Firebase('https://darkness.firebaseIO.com/'),
     sketchpad = Raphael.sketchpad("editor", {
@@ -13,25 +9,15 @@
     }),
     pen = sketchpad.pen(),
     penColour,
-    bgColour = "black";
+    bgColour;
 
   function init() {
     // Background colour
-    updateBgColour(bgColour);
+    updateBgColour("black");
 
     // Set up pen
     randomPenColour();
     pen.opacity(0.5);
-  }
-
-  // Control background colour brightness with sensor 1
-  function sensor1Change(value) {
-    var mappedValue = mapSensorValue(value, SENSOR_1_MIN, SENSOR_1_MAX);
-    console.log("1:", value, ",", mappedValue);
-
-    bgColour = "hsl(0, 0%, " + mappedValue + "%)";
-    console.log("bgColour", bgColour);
-    updateBgColour(bgColour);
   }
 
   function sensor2Change(value) {
@@ -59,16 +45,8 @@
   }
 
   function updateBgColour(colour) {
+    bgColour = colour;
     $("body").css("background-color", colour);
-  }
-
-  function mapSensorValue(value, min, max) {
-    var valueProportion = value / (SENSOR_MAX - SENSOR_MIN),
-      valueMap = Math.floor(
-        (valueProportion * (max - min)) + min
-      );
-
-    return valueMap;
   }
 
   function setupSocketIO() {
@@ -83,11 +61,11 @@
     });
 
     socket.on("sensor1", function(value) {
-      sensor1Change(value);
+      // sensor1Change(value);
     });
 
     socket.on("sensor2", function(value) {
-      sensor2Change(value);
+      // sensor2Change(value);
     });
   }
 
@@ -102,6 +80,16 @@
         var strokes = dataVal.lines;
         sketchpad.json(strokes);
       }
+
+      if (dataVal && _.has(dataVal, "background-color")) {
+        var bgColor = dataVal["background-color"];
+        updateBgColour(bgColor);
+      }
+
+      dataRef.child("background-color").on('value', function(data) {
+        var colour = data.val();
+        updateBgColour(colour);
+      });
 
       dataRef.on('value', function(data) {
         var dataVal = data.val();

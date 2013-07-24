@@ -12,7 +12,8 @@
   "dependencies": {
     "serialport": "*",
     "socket.io": "0.9.6",
-    "johnny-five": "~0.7.0"
+    "johnny-five": "~0.7.0",
+    "firebase": "~0.6.0"
   },
   "devDependencies": {
     "matchdep": "~0.1.2",

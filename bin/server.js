@@ -1,5 +1,12 @@
+var SENSOR_MIN = 0,
+    SENSOR_MAX = 1023,
+    SENSOR_1_MIN = 0,
+    SENSOR_1_MAX = 100;
+
 var fs = require("fs");
 var url = require("url");
+var Firebase = require('firebase'),
+  dataRef = new Firebase('https://darkness.firebaseIO.com/');
 
 var five = require("johnny-five"),
   board = new five.Board({ port: "/dev/tty.usbserial-A800ep51" }),
@@ -59,6 +66,15 @@ console.log("server started on localhost:9090");
 var io = require("socket.io").listen(http); // server listens for socket.io communication at port 8000
 io.set("log level", 1); // disables debugging. this is optional. you may remove it if desired.
 
+function mapSensorValue(value, min, max) {
+  var valueProportion = value / (SENSOR_MAX - SENSOR_MIN),
+    valueMap = Math.floor(
+      (valueProportion * (max - min)) + min
+    );
+
+  return valueMap;
+}
+
 // Connect to arduino
 board.on("ready", function() {
   console.log("board ready");
@@ -66,9 +82,11 @@ board.on("ready", function() {
   pot = new Potentiometer("A0");
   pot2 = new Potentiometer("A1");
 
-  pot.on("read", function() {
-    console.log("pot", pot.val);
-    io.sockets.emit("sensor1", pot.val);
+  pot.on("read", function(value) {
+    var mappedValue = mapSensorValue(value, SENSOR_1_MIN, SENSOR_1_MAX),
+      bgColour = "hsl(0, 0%, " + mappedValue + "%)";
+
+    dataRef.child("background-color").set(bgColour);
   });
 
   pot2.on("read", function() {
