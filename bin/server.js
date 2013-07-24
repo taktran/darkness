@@ -18,7 +18,11 @@ var Firebase = require('firebase'),
 var five = require("johnny-five"),
   board = new five.Board({ port: "/dev/tty.usbserial-A800ep51" }),
   Potentiometer = require("../lib/Potentiometer").Potentiometer,
-  pot, pot2;
+
+  lightnessPot,
+  huePot,
+  penSizePot,
+  photoResistor;
 
 // static file http server
 // serve files for application directory
@@ -110,6 +114,23 @@ board.on("ready", function() {
     dataRef.child("pen-size").set(penSize);
   });
   penSizePot.injectIntoRepl(board);
+
+
+  // ------------------------------
+  // Photo resister
+  // ------------------------------
+  photoResistor = new five.Sensor({
+    pin: "A3",
+    freq: 250
+  });
+
+  board.repl.inject({
+    pot: photoResistor
+  });
+
+  photoResistor.on("read", function( err, value ) {
+    // console.log( value, this.normalized );
+  });
 });
 
 io.sockets.on("connection", function (socket) {
