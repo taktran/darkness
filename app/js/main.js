@@ -6,8 +6,8 @@
 
   var dataRef = new Firebase('https://darkness.firebaseIO.com/'),
     sketchpad = Raphael.sketchpad("editor", {
-      width: 900,
-      height: 800,
+      width: $(window).width(),
+      height: $(window).height(),
       editing: true
     }),
     pen = sketchpad.pen(),
