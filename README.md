@@ -1,8 +1,14 @@
 # Darkness
 
-It's dark in here.
+>> It's dark in here.
 
-Made for pebblecode art hack 2013.
+[http://taktran.github.io/darkness/](http://taktran.github.io/darkness/)
+
+A colloborative canvas, which tends to darkness when there is no activity.
+
+A server is also available, to adjust pen size and adjust pen opacity using an arduino.
+
+Made for [pebblecode](http://pebblecode.com) art hack 2013.
 
 ## Installation
 
@@ -16,28 +22,22 @@ Made for pebblecode art hack 2013.
 
         npm install
 
-3. Install nodemon
+3. Install nodemon (for live updates)
 
         npm install nodemon
 
 ## Development
 
-Start the node server:
+1. Connect the arduino (more instructions to come)
+2. Start the node server:
 
-    nodemon bin/server.js
+        nodemon bin/server.js
 
+3. Start the front end:
 
-Go to http://localhost:9090/
+        grunt
 
-   To see input values, go to http://localhost:9090/input.html
-
-## Testing
-
-Uses [karma](http://karma-runner.github.io/) and [jasmine](http://pivotal.github.io/jasmine/).
-
-Karma is run automatically when `grunt` is called. To run it manually
-
-    karma start
+3. Go to http://localhost:7770/
 
 ## Author
 
