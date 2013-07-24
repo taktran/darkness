@@ -11,6 +11,7 @@
       editing: true
     }),
     pen = sketchpad.pen(),
+    penSize = 5,
     penColour,
     bgColour = {
       h: "0",
@@ -24,6 +25,7 @@
 
     // Set up pen
     randomPenColour();
+    updatePenSize();
     pen.opacity(0.5);
   }
 
@@ -54,6 +56,10 @@
 
     console.log(colour);
     $("body").css("background-color", colour);
+  }
+
+  function updatePenSize() {
+    pen.width(penSize);
   }
 
   // function setupSocketIO() {
@@ -113,6 +119,11 @@
         }
 
         updateBgColour();
+      });
+
+      dataRef.child("pen-size").on('value', function(data) {
+        penSize = data.val();
+        updatePenSize();
       });
 
       // When the sketchpad changes, upload data

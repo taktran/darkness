@@ -1,11 +1,14 @@
 var SENSOR_MIN = 0,
     SENSOR_MAX = 1023,
 
-    SENSOR_1_MIN = 0,
-    SENSOR_1_MAX = 100,
+    LIGHTNESS_MIN = 0,
+    LIGHTNESS_MAX = 100,
 
-    SENSOR_2_MIN = 0,
-    SENSOR_2_MAX = 360;
+    HUE_MIN = 1,
+    HUE_MAX = 360,
+
+    PEN_SIZE_MIN = 3,
+    PEN_SIZE_MAX = 400;
 
 var fs = require("fs");
 var url = require("url");
@@ -85,23 +88,28 @@ board.on("ready", function() {
 
   lightnessPot = new Potentiometer("A0");
   huePot = new Potentiometer("A1");
-  pot3 = new Potentiometer("A2");
+  penSizePot = new Potentiometer("A2");
 
   lightnessPot.on("read", function(value) {
-    var lightness = mapSensorValue(value, SENSOR_1_MIN, SENSOR_1_MAX);
+    var lightness = mapSensorValue(value, LIGHTNESS_MIN, LIGHTNESS_MAX);
 
     dataRef.child("background-lightness").set(lightness);
   });
   lightnessPot.injectIntoRepl(board);
 
   huePot.on("read", function(value) {
-    var hue = mapSensorValue(value, SENSOR_2_MIN, SENSOR_2_MAX);
+    var hue = mapSensorValue(value, HUE_MIN, HUE_MAX);
 
     dataRef.child("background-hue").set(hue);
   });
-
-
   huePot.injectIntoRepl(board);
+
+  penSizePot.on("read", function(value) {
+    var penSize = mapSensorValue(value, PEN_SIZE_MIN, PEN_SIZE_MAX);
+
+    dataRef.child("pen-size").set(penSize);
+  });
+  penSizePot.injectIntoRepl(board);
 });
 
 io.sockets.on("connection", function (socket) {
