@@ -55,12 +55,6 @@
         }
       });
 
-      dataRef.on('child_removed', function() {
-        console.log("child_removed", data.val());
-        // var lines = data.val();
-        // sketchpad.json(lines);
-      });
-
       // When the sketchpad changes, upload data
       sketchpad.change(function() {
         var data = sketchpad.json();
