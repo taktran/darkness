@@ -17,7 +17,7 @@ var Firebase = require('firebase'),
 
 var five = require("johnny-five"),
   board = new five.Board({ port: "/dev/tty.usbserial-A800ep51" }),
-  Potentiometer = require("../lib/Potentiometer").Potentiometer,
+  Sensor = require("../lib/Sensor"),
 
   lightnessPot,
   huePot,
@@ -90,9 +90,9 @@ function mapSensorValue(value, min, max) {
 board.on("ready", function() {
   console.log("board ready");
 
-  lightnessPot = new Potentiometer("A0");
-  huePot = new Potentiometer("A1");
-  penSizePot = new Potentiometer("A2");
+  lightnessPot = new Sensor("A0");
+  huePot = new Sensor("A1");
+  penSizePot = new Sensor("A2");
 
   lightnessPot.on("read", function(value) {
     var lightness = mapSensorValue(value, LIGHTNESS_MIN, LIGHTNESS_MAX);
