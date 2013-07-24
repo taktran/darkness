@@ -152,6 +152,11 @@
       event.stopPropagation();
     });
 
+    $(".title").click(function() {
+      $(".info").toggle();
+      event.stopPropagation();
+    });
+
     // Change pen colour when clicking on footer
     $("footer").click(function() {
       randomPenColour();
