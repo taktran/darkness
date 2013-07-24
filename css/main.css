@@ -1,0 +1,41 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: "Helvetica, sans-serif";
+  background-color: black; }
+
+.title {
+  cursor: pointer; }
+
+.info {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 115px;
+  height: 35px;
+  background-color: white;
+  padding: 10px; }
+  .info p {
+    margin: 0; }
+
+footer {
+  position: fixed;
+  background-color: #919191;
+  bottom: 0;
+  height: 20px;
+  width: 100%;
+  padding: 10px;
+  cursor: pointer; }
+  footer p {
+    background-color: black;
+    color: white;
+    display: inline-block;
+    width: 140px;
+    padding: 5px;
+    margin-top: -4px; }
+
+#clear {
+  position: absolute;
+  right: 30px;
+  top: 10px; }
