@@ -7,7 +7,7 @@
       editing: true
     }),
     pen = sketchpad.pen(),
-    penColour = randomColour();
+    penColour;
 
   function randomColour() {
     // 30 random hues with step of 12 degrees
@@ -21,11 +21,17 @@
     }).toHexString();
   }
 
-  pen.color(penColour);
-  pen.opacity(0.5);
+  function randomPenColour() {
+    penColour = randomColour();
+    console.log("randomPenColour", penColour);
+    pen.color(penColour);
+    $("footer").css("background-color", penColour);
+  }
 
   $(document).ready(function () {
-    $("footer").css("background-color", penColour);
+    // Set up pen
+    randomPenColour();
+    pen.opacity(0.5);
 
     // Initial draw
     dataRef.once('value', function(data) {
@@ -62,8 +68,15 @@
       });
     });
 
-    $("#clear").click(function() {
+    $("#clear").click(function(event) {
       dataRef.child("lines").remove();
+
+      event.stopPropagation();
+    });
+
+    // Change pen colour when clicking on footer
+    $("footer").click(function() {
+      randomPenColour();
     });
   });
 
