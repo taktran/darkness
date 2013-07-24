@@ -1,7 +1,11 @@
 var SENSOR_MIN = 0,
     SENSOR_MAX = 1023,
+
     SENSOR_1_MIN = 0,
-    SENSOR_1_MAX = 100;
+    SENSOR_1_MAX = 100,
+
+    SENSOR_2_MIN = 0,
+    SENSOR_2_MAX = 360;
 
 var fs = require("fs");
 var url = require("url");
@@ -81,17 +85,18 @@ board.on("ready", function() {
 
   pot = new Potentiometer("A0");
   pot2 = new Potentiometer("A1");
+  pot3 = new Potentiometer("A2");
 
   pot.on("read", function(value) {
-    var mappedValue = mapSensorValue(value, SENSOR_1_MIN, SENSOR_1_MAX),
-      bgColour = "hsl(0, 0%, " + mappedValue + "%)";
+    var lightness = mapSensorValue(value, SENSOR_1_MIN, SENSOR_1_MAX);
 
-    dataRef.child("background-color").set(bgColour);
+    dataRef.child("background-lightness").set(lightness);
   });
 
-  pot2.on("read", function() {
-    console.log("pot2", pot2.val);
-    io.sockets.emit("sensor2", pot2.val);
+  pot2.on("read", function(value) {
+    var hue = mapSensorValue(value, SENSOR_2_MIN, SENSOR_2_MAX);
+
+    dataRef.child("background-hue").set(hue);
   });
 
   pot.injectIntoRepl(board);

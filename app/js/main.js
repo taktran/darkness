@@ -1,6 +1,9 @@
 (function (){
   'use strict';
 
+  var HUE_MIN = 0,
+      HUE_MAX = 360;
+
   var dataRef = new Firebase('https://darkness.firebaseIO.com/'),
     sketchpad = Raphael.sketchpad("editor", {
       width: 900,
@@ -9,20 +12,19 @@
     }),
     pen = sketchpad.pen(),
     penColour,
-    bgColour;
+    bgColour = {
+      h: "0",
+      s: "0",
+      l: "0"
+    };
 
   function init() {
     // Background colour
-    updateBgColour("black");
+    updateBgColour();
 
     // Set up pen
     randomPenColour();
     pen.opacity(0.5);
-  }
-
-  function sensor2Change(value) {
-    var mappedValue = "unknown"; //mapSensorValue(value);
-    console.log("2:", value, ",", mappedValue);
   }
 
   function randomColour() {
@@ -44,30 +46,36 @@
     $("footer").css("background-color", penColour);
   }
 
-  function updateBgColour(colour) {
-    bgColour = colour;
+  function updateBgColour() {
+    var colour = "hsl(" + bgColour.h + "," +
+                          bgColour.s + "%," +
+                          bgColour.l + "%)";
+
+
+    console.log(colour);
     $("body").css("background-color", colour);
   }
 
-  function setupSocketIO() {
-    var socket = io.connect("/", {
-      "reconnect" : true,
-      "reconnection delay" : 500,
-      "max reconnection attempts" : 10
-    });
+  // function setupSocketIO() {
+  //   var socket = io.connect("/", {
+  //     "reconnect" : true,
+  //     "reconnection delay" : 500,
+  //     "max reconnection attempts" : 10
+  //   });
 
-    socket.on("connect", function() {
-      socket.emit("message", "Connected - " + (new Date()).toString());
-    });
+  //   socket.on("connect", function() {
+  //     socket.emit("message", "Connected - " + (new Date()).toString());
+  //   });
 
-    socket.on("sensor1", function(value) {
-      // sensor1Change(value);
-    });
 
-    socket.on("sensor2", function(value) {
-      // sensor2Change(value);
-    });
-  }
+  //   socket.on("sensor1", function(value) {
+
+  //   });
+
+  //   socket.on("sensor2", function(value) {
+
+  //   });
+  // }
 
   $(document).ready(function () {
     init();
@@ -81,14 +89,23 @@
         sketchpad.json(strokes);
       }
 
-      if (dataVal && _.has(dataVal, "background-color")) {
-        var bgColor = dataVal["background-color"];
-        updateBgColour(bgColor);
-      }
+      dataRef.child("background-lightness").on('value', function(data) {
+        bgColour.l = data.val();
+        updateBgColour();
+      });
 
-      dataRef.child("background-color").on('value', function(data) {
-        var colour = data.val();
-        updateBgColour(colour);
+      dataRef.child("background-hue").on('value', function(data) {
+        bgColour.h = data.val();
+
+        if (bgColour.h === HUE_MIN) {
+          bgColour.s = 100;
+        } else if (bgColour.h === HUE_MAX) {
+          bgColour.s = 0;
+        } else {
+          bgColour.s = 50;
+        }
+
+        updateBgColour();
       });
 
       dataRef.on('value', function(data) {
@@ -122,7 +139,8 @@
       randomPenColour();
     });
 
-    setupSocketIO();
+    // Not used anymore - using firebase instead
+    // setupSocketIO();
   });
 
   // Global variables (for debugging)
