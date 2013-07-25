@@ -1,12 +1,14 @@
 # Darkness
 
->> It's dark in here.
+> It's dark in here.
 
 [http://taktran.github.io/darkness/](http://taktran.github.io/darkness/)
 
-A colloborative canvas, which tends to darkness when there is no activity.
+A collaborative canvas, which tends towards darkness when there is no activity or too much light.
 
-A server is also available, to adjust pen size and adjust pen opacity using an arduino.
+Built using [nodejs](http://nodejs.org/), with [arduino hardware](http://www.arduino.cc/) connected using [johnny five](https://github.com/rwldrn/johnny-five), and backend database connected using [firebase](https://www.firebase.com/).
+
+The backend server and arduino adjusts the pen size using a potentiometer, the pen opacity using a light sensor.
 
 Made for [pebblecode](http://pebblecode.com) art hack 2013.
 
